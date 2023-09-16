@@ -4,10 +4,11 @@ import {
   Route
 } from 'react-router-dom'
 import Home from './Home'
-import Create, { tags } from './Create'
+import Create  from './Create'
 import { useState } from 'react'
 import Note from './Note'
 import Edit from './Edit'
+import Navbar from './Navbar'
 
 export type noteObj = {
   id : string,
@@ -16,14 +17,21 @@ export type noteObj = {
   body : string
 }
 
+export type tags = {
+  id : string
+  name : string
+}
+
+
 function App() {
   const [postArray,setPostArray] = useState<noteObj[]>([])
-  const [postObj, setPostObj] = useState<noteObj | null>()
+  const [postObj, setPostObj] = useState<noteObj>()
   return (
     <BrowserRouter>
+    <Navbar/>
     <Routes>
-      <Route path='/' element = {<Home postArray = {postArray} />} />
-      <Route path='/new' element = {<Create setPostArray={setPostArray} postArray = {postArray} />} />
+      <Route path='/' element = {<Home setPostArray={setPostArray} postArray={postArray}/>} />
+      <Route path='/new' element = {<Create postArray = {postArray}  setPostArray={setPostArray} />} />
       <Route path='/:id' element = {<Note setPostArray={setPostArray} setPostObj={setPostObj} postArray={postArray}/>} />
       <Route path='/:id/edit' element = {<Edit postObj={postObj} setPostArray={setPostArray} postArray={postArray}/>} />
     </Routes>

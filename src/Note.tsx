@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 type NoteType = {
   postArray: noteObj[];
   setPostArray: React.Dispatch<React.SetStateAction<noteObj[]>>;
-  setPostObj: React.Dispatch<React.SetStateAction<noteObj>>;
+  setPostObj: React.Dispatch<React.SetStateAction<noteObj | undefined>>;
 };
+
+
 
 function Note({ postArray, setPostArray, setPostObj }: NoteType) {
   const [index, setIndex] = useState(0);
