@@ -5,11 +5,12 @@ import { noteObj } from "./App";
 import { tags } from "./App";
 
 type CreateProps = {
+  setTagArray : React.Dispatch<React.SetStateAction<tags[]>>
   postArray: noteObj[];
   setPostArray: React.Dispatch<React.SetStateAction<noteObj[]>>;
 };
 
-function Create({ setPostArray, postArray }: CreateProps) {
+function Create({ setPostArray, postArray,setTagArray }: CreateProps) {
   const id: string = uuidV4();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -17,6 +18,7 @@ function Create({ setPostArray, postArray }: CreateProps) {
   const [body, setBody] = useState("");
   const [dropdownTagSelect,setDropDownSelectTag] = useState("")
   const [localTagArray, setLocalTagArray] = useState<tags[]>([]);
+  // const [localTagArray, setLocalTagArray] = useLocalStorage<tags[]>("TAGS",[]);
 
   const enterKeyHandler = (e: any) => {
     if (e.key === "Enter") {
@@ -54,6 +56,8 @@ function Create({ setPostArray, postArray }: CreateProps) {
       id: id,
       tags: localTagArray,
     };
+
+    setTagArray(notesObj.tags)
     setPostArray((e) => [...e, notesObj]);
     navigate("/");
   };

@@ -9,6 +9,7 @@ import { useState } from 'react'
 import Note from './Note'
 import Edit from './Edit'
 import Navbar from './Navbar'
+import { useLocalStorage } from './useLocalStorage'
 
 export type noteObj = {
   id : string,
@@ -24,14 +25,16 @@ export type tags = {
 
 
 function App() {
-  const [postArray,setPostArray] = useState<noteObj[]>([])
+  // const [postArray,setPostArray] = useState<noteObj[]>([])
+  const [postArray,setPostArray] = useLocalStorage<noteObj[]>("NOTES",[])
   const [postObj, setPostObj] = useState<noteObj>()
+  const [tagArray, setTagArray] = useLocalStorage<tags[]>("TAGS",[]);
   return (
     <BrowserRouter>
-    <Navbar/>
+    <Navbar tagArray = {tagArray}/>
     <Routes>
-      <Route path='/' element = {<Home setPostArray={setPostArray} postArray={postArray}/>} />
-      <Route path='/new' element = {<Create postArray = {postArray}  setPostArray={setPostArray} />} />
+      <Route path='/' element = {<Home  setPostArray={setPostArray} postArray={postArray}/>} />
+      <Route path='/new' element = {<Create setTagArray = {setTagArray} postArray = {postArray}  setPostArray={setPostArray} />} />
       <Route path='/:id' element = {<Note setPostArray={setPostArray} setPostObj={setPostObj} postArray={postArray}/>} />
       <Route path='/:id/edit' element = {<Edit postObj={postObj} setPostArray={setPostArray} postArray={postArray}/>} />
     </Routes>
