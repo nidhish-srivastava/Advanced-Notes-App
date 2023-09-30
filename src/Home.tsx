@@ -4,10 +4,9 @@ import { useState } from "react";
 
 type HomeProps = {
   postArray: noteObj[];
-  setPostArray: React.Dispatch<React.SetStateAction<noteObj[]>>;
 };
 
-function Home({ postArray, setPostArray }: HomeProps) {
+function Home({ postArray}: HomeProps) {
   const [input, setInput] = useState("");
   const [inputForTag, setInputForTag] = useState("");
   const [toggle,setToggle] = useState(false)
@@ -59,7 +58,7 @@ function Home({ postArray, setPostArray }: HomeProps) {
       />
       {!toggle ? filteredResults.map((e) => (
         <Link to={`/${e.id}`}>
-          <div>
+          <div  style={{border : "2px solid white",width :"fit-content",padding : "2rem",marginTop : "1rem"}}>
             <h2>{e.title}</h2>
             <div>
               <h2>
@@ -88,13 +87,6 @@ function Home({ postArray, setPostArray }: HomeProps) {
         ))
       )
       }
-      {/* <button onClick={filterBasedOnTags}>Search</button>
-      //* We also created a new array where we were storing the new results then rendering it based on map method
-      //* FINALLY THE PORBLEM IS SOLVED
-      //* WE CREATED THE LOGIC OF SEARCHING BASED ON TAGS BUT WERE NOT ABLE TO IMPLEMENT IT ON EVRY KEY STROKE
-      //* WE MANAGED TO DO BASED ON onCLick event where we triggered our function
-      //* using e.target.value inside onChange with help of length(with ternary operatores,we aachieved our functionality)
-      */}
     </div>
   );
 }

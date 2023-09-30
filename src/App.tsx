@@ -33,7 +33,7 @@ function App() {
     <BrowserRouter>
     <Navbar tagArray = {tagArray}/>
     <Routes>
-      <Route path='/' element = {<Home  setPostArray={setPostArray} postArray={postArray}/>} />
+      <Route path='/' element = {<Home  postArray={postArray}/>} />
       <Route path='/new' element = {<Create setTagArray = {setTagArray} postArray = {postArray}  setPostArray={setPostArray} />} />
       <Route path='/:id' element = {<Note setPostArray={setPostArray} setPostObj={setPostObj} postArray={postArray}/>} />
       <Route path='/:id/edit' element = {<Edit postObj={postObj} setPostArray={setPostArray} postArray={postArray}/>} />
