@@ -55,8 +55,7 @@ function Create({ setPostArray, postArray,setTagArray }: CreateProps) {
       body: body,
       id: id,
       tags: localTagArray,
-    };
-
+    }
     setTagArray(notesObj.tags)
     setPostArray((e) => [...e, notesObj]);
     navigate("/");
