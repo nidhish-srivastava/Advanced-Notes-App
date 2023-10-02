@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 type NoteType = {
   postArray: noteObj[];
   setPostArray: React.Dispatch<React.SetStateAction<noteObj[]>>;
-  setPostObj: React.Dispatch<React.SetStateAction<noteObj | undefined>>;
+  setPostObj: React.Dispatch<React.SetStateAction<Partial<noteObj | undefined>>>;
 };
 
 

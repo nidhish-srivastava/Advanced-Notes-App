@@ -1,9 +1,19 @@
 import { Link } from "react-router-dom";
 import { tags } from "./App";
 import { useState } from "react";
+import Modal from "./Modal";
 
 function Navbar({tagArray} : {tagArray : tags[]}) {
-  const [show,setShow] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
       <header className="header">
         <Link to={`/`}>
@@ -12,10 +22,14 @@ function Navbar({tagArray} : {tagArray : tags[]}) {
         <Link to={`/new`}>
           Create
         </Link>
-        <button onClick={()=>setShow(e=>!e)}>Edit Tags</button>
-        {show ? tagArray.map(e=>(
+        <div>
+      <button onClick={openModal}>Edit Tags</button>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {tagArray.map(e=>(
           <option value="">{e.name}</option>
-          )) : null}
+          ))}
+      </Modal>
+    </div>
     </header>
   );
 }

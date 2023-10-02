@@ -1,35 +1,41 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuidV4 } from "uuid";
 import { noteObj } from "./App";
 import { tags } from "./App";
 
 type CreateProps = {
-  setTagArray : React.Dispatch<React.SetStateAction<tags[]>>
-  postArray: noteObj[];
+  setTagArray: React.Dispatch<React.SetStateAction<tags[]>>;
   setPostArray: React.Dispatch<React.SetStateAction<noteObj[]>>;
+  tagArray: tags[];
 };
 
-function Create({ setPostArray, postArray,setTagArray }: CreateProps) {
+let render = 0;
+function Create({ setPostArray, setTagArray, tagArray }: CreateProps) {
+  render++;
   const id: string = uuidV4();
+  // const inputRef = useRef({
+  //   title:'',
+  //   description:'',
+  // })
+  const tagInputRef = useRef<HTMLInputElement | null>(null);
+  const titleInputRef = useRef<HTMLInputElement | null>(null)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [tag, setTag] = useState("");
-  const [body, setBody] = useState("");
-  const [dropdownTagSelect,setDropDownSelectTag] = useState("")
   const [localTagArray, setLocalTagArray] = useState<tags[]>([]);
-  // const [localTagArray, setLocalTagArray] = useLocalStorage<tags[]>("TAGS",[]);
 
-  const enterKeyHandler = (e: any) => {
+  const enterKeyHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault(); //* we need to prevent this form on submitting
-      const tagObj = {
-        id: Math.random().toString(),
-        name: tag,
-      };
-      // setTags(e=>[...e,tagObj])
-      setLocalTagArray((e) => [...e, tagObj]);
-      setTag("");
+      if(tagInputRef.current && tagInputRef.current.value!=""){  //* This if not included will give ts errors
+        const tagObj = {
+          id: Math.random().toString(),
+          name: tagInputRef.current.value,
+        };
+        // setTags(e=>[...e,tagObj])
+        setLocalTagArray((e) => [...e, tagObj] as tags[]);
+        tagInputRef.current.value = ""
+      }
     }
   };
 
@@ -42,39 +48,70 @@ function Create({ setPostArray, postArray,setTagArray }: CreateProps) {
     setLocalTagArray([]);
   };
 
-  const onChangeEveneOnTagsDropDown = (e:React.ChangeEvent<HTMLSelectElement>) =>{
-    setDropDownSelectTag(e.target.value)
-    let input = e.target.value
-    setLocalTagArray(e=>[...e,{name : input,id : uuidV4()}])
-  }
+  const onChangeEveneOnTagsDropDown = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedValue = e.target.value;
+
+    // Check if the selectedValue is already in localTagArray
+    const isValueUnique = !localTagArray.some(
+      (tag) => tag.name === selectedValue
+    );
+
+    if (isValueUnique) {
+      setLocalTagArray((prevTags) => [
+        ...prevTags,
+        { name: selectedValue, id: uuidV4() },
+      ]);
+    }
+  };
 
   const submitHandler = (e: any) => {
     e.preventDefault();
-    const notesObj = {
-      title: title,
-      body: body,
+
+      const notesObj: noteObj = {
+        title: titleInputRef.current?.value,
+      body: textareaRef.current?.value,
       id: id,
       tags: localTagArray,
-    }
-    setTagArray(notesObj.tags)
+    };
+    setTagArray(notesObj.tags);
     setPostArray((e) => [...e, notesObj]);
     navigate("/");
   };
+
+  const showRefreshAlert = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "";
+  };
+  useEffect(() => {
+    console.log(render);
+  });
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", showRefreshAlert);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("beforeunload", showRefreshAlert);
+    };
+  }, []);
   return (
     <div>
       <form onSubmit={submitHandler}>
         <label htmlFor="title">title</label>
         <input
+          required={true}
           type="text"
           name="title"
           id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          ref={titleInputRef}
         />
+        <br />
         <label htmlFor="tags">Tags</label>
         <div style={{ border: "2px solid white", width: "40%" }}>
           <div>
-            {localTagArray.map((e) => (
+            {localTagArray?.map((e) => (
               <button style={{ margin: "1rem" }} type="button">
                 {e.name}
                 <span
@@ -96,31 +133,33 @@ function Create({ setPostArray, postArray,setTagArray }: CreateProps) {
           <span>Press enter to insert tag</span>
           <input
             type="text"
-            value={tag}
-            onChange={(e) => setTag(e.target.value)}
+            ref={tagInputRef}
+            name="tag"
             onKeyDown={enterKeyHandler}
           />
         </div>
-        {tag}
         <br />
         <div>
-          {postArray.map((e) => {
-            return (
-              <select value={dropdownTagSelect} onChange={onChangeEveneOnTagsDropDown}>
-                <option value="">{" "}</option>
-                {e.tags.map((e) => (
-                  <option value={e.name}>{e.name}</option>
-                ))}
-              </select>
-            );
-          })}
+          <br />
+          <label>Choose from Global tags</label>
+          <br />
+          <select
+            name="globalTags"
+            id="globalTags"
+            onChange={onChangeEveneOnTagsDropDown}
+          >
+            {tagArray.map((e, i) => (
+              <option key={i} value={e.name}>
+                {e.name}
+              </option>
+            ))}
+          </select>
         </div>
         <label htmlFor="body">Body</label>
         <textarea
           name="body"
           id="body"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
+          ref={textareaRef}
           cols={30}
           rows={10}
         ></textarea>

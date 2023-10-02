@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { noteObj } from "./App";
 import { useState } from "react";
+// import Modal from "./Modal";
 
 type HomeProps = {
   postArray: noteObj[];
@@ -14,7 +15,7 @@ function Home({ postArray}: HomeProps) {
 
   //* Since we are adding two search functionalietes,now we need to create a state so that we can set the state
   const filteredResults = postArray.filter((e) =>
-    e.title.toLowerCase().includes(input.toLowerCase())
+    e.title?.toLowerCase().includes(input.toLowerCase())
   );
 
   //* WE have created this functionality but problem is coming when we override,shit is getting real 
@@ -92,3 +93,27 @@ function Home({ postArray}: HomeProps) {
 }
 
 export default Home;
+
+
+// const ModalParent: React.FC = () => {
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+
+//   const openModal = () => {
+//     setIsModalOpen(true);
+//   };
+
+//   const closeModal = () => {
+//     setIsModalOpen(false);
+//   };
+
+//   return (
+//     <div>
+//       <button onClick={openModal}>Open Modal</button>
+//       <Modal isOpen={isModalOpen} onClose={closeModal}>
+//         <h2>Modal Content</h2>
+//         <p>This is the content of the modal.</p>
+//       </Modal>
+//     </div>
+//   );
+// };
+

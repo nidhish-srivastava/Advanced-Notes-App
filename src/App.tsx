@@ -13,9 +13,9 @@ import { useLocalStorage } from './useLocalStorage'
 
 export type noteObj = {
   id : string,
-  title : string,
+  title ?: string,
   tags : tags[]
-  body : string
+  body ?: string
 }
 
 export type tags = {
@@ -25,16 +25,15 @@ export type tags = {
 
 
 function App() {
-  // const [postArray,setPostArray] = useState<noteObj[]>([])
   const [postArray,setPostArray] = useLocalStorage<noteObj[]>("NOTES",[])
-  const [postObj, setPostObj] = useState<noteObj>()
+  const [postObj, setPostObj] = useState<Partial<noteObj>>()
   const [tagArray, setTagArray] = useLocalStorage<tags[]>("TAGS",[]);
   return (
     <BrowserRouter>
     <Navbar tagArray = {tagArray}/>
     <Routes>
       <Route path='/' element = {<Home  postArray={postArray}/>} />
-      <Route path='/new' element = {<Create setTagArray = {setTagArray} postArray = {postArray}  setPostArray={setPostArray} />} />
+      <Route path='/new' element = {<Create tagArray={tagArray} setTagArray = {setTagArray}  setPostArray={setPostArray} />} />
       <Route path='/:id' element = {<Note setPostArray={setPostArray} setPostObj={setPostObj} postArray={postArray}/>} />
       <Route path='/:id/edit' element = {<Edit postObj={postObj} setPostArray={setPostArray} postArray={postArray}/>} />
     </Routes>

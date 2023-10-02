@@ -29,3 +29,49 @@ a {
     font-size: 1.4rem;
   }
 }
+
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure the modal is on top of everything */
+}
+
+/* Modal Container */
+.modal {
+  // background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+  max-width: 80%; /* Adjust the width as needed */
+  padding: 20px;
+  z-index: 1001; /* Ensure the modal is above the overlay */
+}
+
+/* Modal Content */
+.modal-content {
+  /* Add your custom styles for the modal content here */
+}
+
+/* Close Button */
+.modal button {
+  background-color: #007bff; /* Blue color, you can change it */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Close Button Hover Effect */
+.modal button:hover {
+  background-color: #0056b3; /* Darker shade of blue */
+}
