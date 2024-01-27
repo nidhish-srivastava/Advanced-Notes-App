@@ -26,7 +26,7 @@ export type tags = {
 
 function App() {
   const [postArray,setPostArray] = useLocalStorage<noteObj[]>("NOTES",[])
-  const [postObj, setPostObj] = useState<Partial<noteObj>>()
+  const [postObj, setPostObj] = useState<noteObj>()
   const [tagArray, setTagArray] = useLocalStorage<tags[]>("TAGS",[]);
   return (
     <BrowserRouter>
